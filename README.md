@@ -1,6 +1,6 @@
 # Web Chain
 
-A flask app that saves the text data from users in a **PoW** based "blockchain". It had been created for with learning purpose.
+A flask app for blockchain visualization that saves the text data from users in a **PoW** based "blockchain". It had been created for purposes.
 
 
 ### Block Structure
