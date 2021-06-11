@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
+
+    <title>Block | Web Chain</title>
+</head>
+
+<body>
+
+    <!-- As a link -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Web Chain</a>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="card text-white bg-dark mb-5 mt-5 m p-5 border-success">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <h1 class="card-title mb-4">Create New Block</h1>
+                </div>
+                <table class="table table-bordered table-dark">
+                    <tbody>
+                        <tr>
+                            <td>Version: </td>
+                            <td>{{ last_block.version }}</td>
+                        </tr>
+                        <tr>
+                            <td>Difficulty: </td>
+                            <td>{{ last_block.difficulty }}</td>
+                        </tr>
+                        <tr>
+                            <td>Previous Hash: </td>
+                            <td>{{ last_block.hash }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="form-group">
+                    <form action="/new_block" method="POST">
+                        <label class="text-center" for="new_block_data">
+                            <h3 class="text-info mb-4">Block Data: </h3>
+                        </label>
+
+                        <textarea id="new_block_data" name="new_block_data" class="form-control text-white bg-dark mb-3" rows="20">asdf</textarea>
+                        <div style="display:flex;justify-content:flex-end;align-items:center;">
+                            <div>
+                                <button type="submit" class="btn btn-success align-content-end">Minerar Bloco</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

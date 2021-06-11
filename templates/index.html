@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
+
+    <title>Home | Web Chain</title>
+</head>
+
+<body>
+
+    <!-- As a link -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <h1 class="h1 m-5">Web Chain</h1>
+            </a>
+            <a href="/new_block"><button type="button" class="btn btn-success m-5">Add New Block</button></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="card text-white bg-dark mb-3 mt-5 col p-5 border-danger"
+                style="max-width: 50%; margin-right: 10%;">
+                <div class="card-body">
+                    <h1 class="card-title" style="font-size: 80px">{{ blockchain.n_blocks }} blocos</h1>
+                </div>
+            </div>
+            <div class="card text-white bg-dark mb-3 mt-5 m col p-5 border-success" style="max-width: 50%;">
+                <div class="card-body">
+                    <h1 class="card-title">5 blocos</h1>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's
+                        content.</p>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="h1 mt-4 text-center text-info">Blocos:</h1>
+
+        <table class="table table-hover mt-5 mb-5 border-secondary">
+            <thead>
+                <tr>
+                    <th scope="col">Index</th>
+                    <th scope="col">Block Hash</th>
+                    <th scope="col">Time (UTC)</th>
+                    <th scope="col">Block Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for block in blockchain.chain %}
+                    <tr>
+                        <th scope="row">{{ block.index }}</th>
+                        <td><a href="/block/{{ block.hash }}">{{ block.hash[:20] }}...</a></td>
+                        <td>{{ block.time }}</td>
+                        <td>{{ block.data }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+</body>
+
+</html>
