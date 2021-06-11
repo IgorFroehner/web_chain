@@ -12,7 +12,7 @@ class Blockchain:
         self.create_genesis_block()
 
     def create_genesis_block(self):
-        genesis_block = Block(0, 'igor mt mais q foda', "0")
+        genesis_block = Block(0, 'Grupo de brasileiros enviou bitcoin à Lua via rádio', "")
         genesis_block.hash = genesis_block.calculate_hash()
         self.chain.append(genesis_block)
 

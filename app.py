@@ -13,10 +13,9 @@ def index():
     return render_template('index.html', blockchain=bc)
 
 
-@app.route('/block/<hash>')
-def block(hash: str):
-    print(hash)
-    blck = bc.find_block_by_hash(hash)
+@app.route('/block/<block_hash>')
+def block(block_hash: str):
+    blck = bc.find_block_by_hash(block_hash)
     if not blck:
         return redirect('/')
     return render_template('block.html', block=blck)
