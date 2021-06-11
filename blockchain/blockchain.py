@@ -32,6 +32,11 @@ class Blockchain:
     def n_blocks(self):
         return len(self.chain)
 
+    def get_reversed_chain(self):
+        res = self.chain.copy()
+        res.reverse()
+        return res
+
     def find_block_by_hash(self, hash):
         for block in self.chain:
             if block.hash == hash:

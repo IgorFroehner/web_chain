@@ -53,7 +53,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for block in blockchain.chain %}
+                {% for block in blockchain.get_reversed_chain() %}
                     <tr>
                         <th scope="row">{{ block.index }}</th>
                         <td><a href="/block/{{ block.hash }}">{{ block.hash[:20] }}...</a></td>
