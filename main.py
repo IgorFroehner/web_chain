@@ -3,11 +3,15 @@ import json
 from blockchain.blockchain import Blockchain
 from blockchain.block import Block
 
-if __name__=='__main__':
+if __name__ == '__main__':
 
-    b = Blockchain()
+    b = Block(1, 'asdf', 'asdf')
 
+    print(b.calculate_hash())
+
+    exit(0)
     # print(b.get_chain_data())
+    b = Blockchain()
 
     transacao1 = {
         "sender": "igor.asdf",
