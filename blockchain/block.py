@@ -33,8 +33,3 @@ class Block:
         block_string = json.dumps(block_dict, sort_keys=True, separators=(',', ':'))
         # print(block_string)
         return sha256(block_string.encode()).hexdigest()
-
-    def mine_block(self):
-        while not self.hash.startswith('0' * self.difficulty):
-            self.nonce += 1
-            self.hash = self.calculate_hash()
