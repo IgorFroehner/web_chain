@@ -103,7 +103,14 @@
             async calculate_hash() {
                 let block_json = JSON.parse(JSON.stringify(this));
                 delete block_json['hash']
-                let block_str = JSON.stringify(block_json)
+                const ordered_block_json = Object.keys(block_json).sort().reduce(
+                    (obj, key) => {
+                        obj[key] = block_json[key]
+                        return obj
+                    },
+                    {}
+                )
+                let block_str = JSON.stringify(ordered_block_json)
                 return sha256(block_str)
             }
         }
