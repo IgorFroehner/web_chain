@@ -1,4 +1,4 @@
 
 
 def difficulty():
-    return 5
+    return 3
