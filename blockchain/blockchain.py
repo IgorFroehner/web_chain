@@ -127,7 +127,7 @@ class Blockchain:
 
         last_block = self.last_block
 
-        new_indx = last_block.index+1
+        new_indx = last_block.index + 1
         new_block = Block(index=new_indx, data=self.new_data, prev_hash=last_block.hash)
 
         proof = proof_of_work(new_block)
@@ -145,3 +145,9 @@ class Blockchain:
 
     def set_data(self, data: str):
         self.new_data = data
+
+    def size_of_data(self):
+        total_size = 0
+        for block in self.chain:
+            total_size += len(block.data.encode('utf-8'))
+        return total_size

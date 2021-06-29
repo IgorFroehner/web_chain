@@ -28,15 +28,16 @@
             <div class="card text-white bg-dark mb-3 mt-5 col p-5 border-danger"
                 style="max-width: 50%; margin-right: 10%;">
                 <div class="card-body">
-                    <h1 class="card-title" style="font-size: 80px">{{ blockchain.n_blocks }} blocos</h1>
+                    <h1 class="card-title" style="font-size: 80px">{{ blockchain.n_blocks }} Blocks</h1>
+                    <p class="card-text">in the blockchain</p>
                 </div>
             </div>
             <div class="card text-white bg-dark mb-3 mt-5 m col p-5 border-success" style="max-width: 50%;">
                 <div class="card-body">
-                    <h1 class="card-title">5 blocos</h1>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's
-                        content.</p>
+                    <h1 class="card-title" style="font-size: 80px">{{ blockchain.size_of_data() }} Bytes</h1>
+                    <p class="card-text">
+                        of string saved as strings in the blocks of this blockchain
+                    </p>
                 </div>
             </div>
         </div>
