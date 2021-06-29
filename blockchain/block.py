@@ -1,4 +1,5 @@
 from .vars import difficulty
+
 from datetime import datetime
 from hashlib import sha256
 import json
@@ -16,7 +17,7 @@ class Block:
         self.nonce = 1
         self.data = data
         self.difficulty = difficulty()
-        if index == -1 and data == '' and prev_hash == '' and json is not None:
+        if index == -1 and data == '' and prev_hash == '' and block_json is not None:
             # from json
             self.index = block_json['index']
             self.version = block_json['version']
