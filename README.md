@@ -1,6 +1,8 @@
 # Web Chain
 
-A flask app for blockchain visualization that saves the text data from users in a **PoW** based "blockchain". It had been created for purposes.
+A flask app for blockchain visualization that saves the text data from users in a **PoW** based "blockchain". 
+It had been created for learning purposes and designed to be an open data saving structure as a blockchain is, 
+all you need to pay is the computation power of mining your block.
 
 
 ### Block Structure
@@ -27,3 +29,9 @@ A flask app for blockchain visualization that saves the text data from users in 
 * **new_data**: Data that was not already saved to the blockchain.
   
 * **chain**: List of the blocks
+
+### postgres DB?
+
+It is a centralized blockchain, and it stores the data into a postgres table. I know it is not the to do that,
+and I am open to suggestions and help on this point.
+
