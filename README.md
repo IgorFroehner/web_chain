@@ -4,6 +4,11 @@ A flask app for blockchain visualization that saves the text data from users in 
 It had been created for learning purposes and designed to be an open data saving structure as a blockchain is, 
 all you need to pay is the computation power of mining your block.
 
+## Executing
+
+1. Use `create.sql` to create the database
+2. Set the config env variable `SQLALCHEMY_DATABASE_URI`
+3. Run the app using command `flask run`
 
 ### Block Structure
 
