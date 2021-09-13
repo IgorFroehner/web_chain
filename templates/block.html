@@ -1,62 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
-
-    <title>Block | Web Chain</title>
-</head>
-
+{% extends "base.html" %}
+{% block head %}{% endblock %}
+{% block title %}Block | Web Chain{% endblock %}
+{% block body %}
 <body>
 
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Web Chain</a>
-        </div>
-    </nav>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Web Chain</a>
+    </div>
+</nav>
 
-    <div class="container">
+<div class="container">
+    {% if block %}
         <div class="card text-white bg-dark mb-5 mt-5 m p-5 border-success">
             <div class="card-body">
                 <div class="container-fluid">
-                    <h1 class="card-title mb-4">Block  <div class="badge bg-primary">{{ block.index }}</div></h1>
+                    <h1 class="card-title mb-4">Block
+                        <div class="badge bg-primary">{{ block.index }}</div>
+                    </h1>
                 </div>
                 <table class="table table-bordered table-dark">
                     <tbody>
-                        <tr>
-                            <td>Version: </td>
-                            <td>{{ block.version }}</td>
-                        </tr>
-                        <tr>
-                            <td>Time (UTC): </td>
-                            <td>{{ block.time }}</td>
-                        </tr>
-                        <tr>
-                            <td>Difficulty: </td>
-                            <td>{{ block.difficulty }}</td>
-                        </tr>
-                        <tr>
-                            <td>Nonce: </td>
-                            <td>{{ block.nonce }}</td>
-                        </tr>
-                        <tr>
-                            {% if block.index != 0 %}
-                                <td>Previous Hash: </td>
-                                <td>
-                                    <a href="/block/{{ block.prev_hash }}">
-                                        {{ block.prev_hash }}
-                                    </a>
-                                </td>
-                            {% endif %}
-                        </tr>
-                        <tr>
-                            <td>Block Hash: </td>
-                            <td>{{ block.hash }}</td>
-                        </tr>
+                    <tr>
+                        <td>Version:</td>
+                        <td>{{ block.version }}</td>
+                    </tr>
+                    <tr>
+                        <td>Time (UTC):</td>
+                        <td>{{ block.time }}</td>
+                    </tr>
+                    <tr>
+                        <td>Difficulty:</td>
+                        <td>{{ block.difficulty }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nonce:</td>
+                        <td>{{ block.nonce }}</td>
+                    </tr>
+                    <tr>
+                        {% if block.index != 0 %}
+                            <td>Previous Hash:</td>
+                            <td>
+                                <a href="/block/{{ block.prev_hash }}">
+                                    {{ block.prev_hash }}
+                                </a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Block Hash:</td>
+                        <td>{{ block.hash }}</td>
+                    </tr>
                     </tbody>
                 </table>
                 <h3 class="text-info text-center mb-4">Block Data: </h3>
@@ -66,10 +60,14 @@
                 </div>
             </div>
         </div>
+    {% else %}
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Bloco não encontrado!</strong> <a href="#" class="alert-link">Veja a lista dos blocos</a>.
+        </div>
+    {% endif %}
 
-
-    </div>
+</div>
 
 </body>
-
-</html>
+{% endblock %}

@@ -16,7 +16,6 @@ bc = Blockchain()
 
 @app.route('/')
 def index():
-    # TODO: thing if it is correct
     global bc
     bc = bc.update()
     return render_template('index.html', blockchain=bc)
@@ -25,8 +24,6 @@ def index():
 @app.route('/block/<block_hash>')
 def block(block_hash: str):
     response_block = bc.find_block_by_hash(block_hash)
-    if not response_block:
-        return redirect('/')
     return render_template('block.html', block=response_block)
 
 
@@ -37,7 +34,6 @@ def add_block():
         block_hash = block_json['hash']
         new_block = Block(block_json=block_json)
 
-        print(new_block.difficulty)
         bc.add_block(new_block, block_hash)
 
         return redirect('/')

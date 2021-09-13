@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %} New Block | Web Chain {% endblock %}
+{% block body %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
-
-    <title>Block | Web Chain</title>
-</head>
-
-<body>
+    <body>
 
     <!-- As a link -->
     <nav class="navbar navbar-dark bg-dark">
@@ -29,38 +20,39 @@
                 </div>
                 <table class="table table-bordered table-dark">
                     <tbody>
-                        <tr>
-                            <td>Block Index: </td>
-                            <td>{{ last_block.index }}</td>
-                        </tr>
-                        <tr>
-                            <td>Version: </td>
-                            <td>{{ last_block.version }}</td>
-                        </tr>
-                        <tr>
-                            <td>Difficulty: </td>
-                            <td>{{ last_block.difficulty }}</td>
-                        </tr>
-                        <tr>
-                            <td>Previous Hash: </td>
-                            <td>{{ last_block.hash }}</td>
-                        </tr>
+                    <tr>
+                        <td>Block Index:</td>
+                        <td>{{ last_block.index + 1 }}</td>
+                    </tr>
+                    <tr>
+                        <td>Version:</td>
+                        <td>{{ last_block.version }}</td>
+                    </tr>
+                    <tr>
+                        <td>Difficulty:</td>
+                        <td>{{ last_block.difficulty }}</td>
+                    </tr>
+                    <tr>
+                        <td>Previous Hash:</td>
+                        <td>{{ last_block.hash }}</td>
+                    </tr>
                     </tbody>
                 </table>
 
                 <div class="form-group">
-                    <form id="form_block_data" >
-{#                        action="/new_block" method="POST"#}
-                        <label class="text-center"  for="new_block_data">
+                    <form id="form_block_data">
+                        {#                        action="/new_block" method="POST"#}
+                        <label class="text-center" for="new_block_data">
                             <h3 class="text-info mb-4">Block Data: </h3>
                         </label>
 
                         <textarea id="new_block_data" name="new_block_data" class="form-control text-white bg-dark mb-3"
-                            rows="20"></textarea>
+                                  rows="20"></textarea>
                         <div style="display:flex;justify-content:flex-end;align-items:center;">
                             <div>
                                 <button type="button" id="bt-submit" class="btn btn-success align-content-end">Minerar
-                                    Bloco</button>
+                                    Bloco
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -69,77 +61,80 @@
         </div>
 
     </div>
+    </body>
+{% endblock %}
 
+{% block script %}
     <script>
-        data = document.getElementById('new_block_data')
+      data = document.getElementById('new_block_data')
 
-        form = document.getElementById('form_block_data')
+      form = document.getElementById('form_block_data')
 
-        async function sha256(msg) {
-            const msgBuffer = new TextEncoder().encode(msg)
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
-            const hashArray = Array.from(new Uint8Array(hashBuffer))
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-            return hashHex
+      async function sha256(msg) {
+        const msgBuffer = new TextEncoder().encode(msg)
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
+        const hashArray = Array.from(new Uint8Array(hashBuffer))
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+        return hashHex
+      }
+
+      class Block {
+        constructor(index, data, prev_hash) {
+          this.data = data
+          this.difficulty = -1
+          this.hash = ""
+          this.index = index
+          this.nonce = 1
+          this.prev_hash = prev_hash
+          this.time = new Date()
+          this.version = 1
         }
 
-        class Block {
-            constructor(index, data, prev_hash) {
-                this.data = data
-                this.difficulty = -1
-                this.hash = ""
-                this.index = index
-                this.nonce = 1
-                this.prev_hash = prev_hash
-                this.time = new Date()
-                this.version = 1
-            }
-
-            async mine() {
-                this.difficulty = await fetchDifficulty()
-                {# TODO: create a best way to get the comparative_string #}
-                let comparative_string = ""
-                for (let i=0; i<this.difficulty; i++) comparative_string += '0'
-                while (!(""+this.hash).startsWith(comparative_string)) {
-                    this.nonce++
-                    this.hash = await this.calculate_hash()
-                    console.log(this.hash)
-                }
-            }
-
-            async calculate_hash() {
-                let block_json = JSON.parse(JSON.stringify(this));
-                delete block_json['hash']
-                const ordered_block_json = Object.keys(block_json).sort().reduce(
-                    (obj, key) => {
-                        obj[key] = block_json[key]
-                        return obj
-                    },
-                    {}
-                )
-                let block_str = JSON.stringify(ordered_block_json)
-                return sha256(block_str)
-            }
+        async mine() {
+          this.difficulty = await fetchDifficulty()
+          let comparative_string = ""
+          for (let i = 0; i < this.difficulty; i++) comparative_string += '0'
+          while (!("" + this.hash).startsWith(comparative_string)) {
+            this.nonce++
+            this.hash = await this.calculate_hash()
+            console.log(this.hash)
+          }
         }
 
-        document.getElementById('bt-submit').addEventListener('click', async function(e) {
-            const b = await new Block({{ last_block.index }} + 1, data.value, "{{ last_block.hash }}");
-            await b.mine();
-            post("/add_block", b).then(() => window.location.replace('/'))
+        async calculate_hash() {
+          let block_json = JSON.parse(JSON.stringify(this));
+          delete block_json['hash']
+          const ordered_block_json = Object.keys(block_json).sort().reduce(
+            (obj, key) => {
+              obj[key] = block_json[key]
+              return obj
+            },
+            {}
+          )
+          let block_str = JSON.stringify(ordered_block_json)
+          return sha256(block_str)
+        }
+      }
+
+      document.getElementById('bt-submit').addEventListener('click', async function () {
+        const b = await new Block({{ last_block.index }} +1, data.value, "{{ last_block.hash }}");
+        await b.mine();
+        post("/add_block", b).then(() => window.location.replace('/'))
+      })
+
+      window.post = async function (url, data_to_send) {
+        await fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data_to_send)
         })
+      }
 
-        window.post = async function (url, data_to_send) {
-            await fetch(url, {method: 'POST', headers: {'Content-Type': 'application/json'},  body: JSON.stringify(data_to_send)})
-        }
-
-        async function fetchDifficulty() {
-            let res = await fetch('/difficulty')
-                .then(res => res.json())
-            return res['difficulty']
-        }
-
+      async function fetchDifficulty() {
+        let res = await fetch('/difficulty')
+          .then(res => res.json())
+        return res['difficulty']
+      }
     </script>
+{% endblock %}
 
-</body>
-
-</html>

@@ -1,19 +1,18 @@
 import json
 from math import ceil
+from typing import List, Optional
 
-import psycopg2
+from sqlalchemy import exc
 
 from blockchain.block import Block
 import blockchain.block as block
-from app import db
 
 
-def is_valid_proof(block: Block, block_hash: str):
+def is_valid_proof(block: Block, block_hash: str) -> bool:
     return (block_hash.startswith('0' * block.difficulty)) and (block.calculate_hash() == block_hash)
 
 
-def get_chain_from_db():
-    # TODO: validate blockchain here
+def get_chain_from_db() -> List[Block]:
     return block.find_all()
 
 
@@ -24,43 +23,51 @@ def save_block_to_db(block_instance: Block):
 class Blockchain:
 
     def __init__(self):
-        self.new_data = []
-        try:
-            self._chain = get_chain_from_db()
-        except (Exception, psycopg2.Error) as err:
-            print(err, ' em blockchain')
-            exit(0)
-        if len(self._chain) == 0:
-            self.create_genesis_block()
+        self._chain = self.init_chain()
+        self.validate_chain()
         self.difficulty = self.calculate_difficulty()
 
     def update(self):
         self._chain = get_chain_from_db()
         return self
 
-    def create_genesis_block(self):
+    def init_chain(self) -> List[Block]:
+        chain = []
+        try:
+            chain = get_chain_from_db()
+        except (Exception, exc.SQLAlchemyError) as err:
+            print(err, ' in blockchain')
+            exit(0)
+        if len(chain) == 0:
+            chain = self.create_genesis_block()
+        return chain
+
+    def validate_chain(self) -> bool:
+        for block in self._chain:
+            if not block.is_valid():
+                return True
+        return False
+
+    def create_genesis_block(self) -> List[Block]:
         genesis_block = Block(0, 'Grupo de brasileiros enviou bitcoin à Lua via rádio', "")
         genesis_block.hash = genesis_block.calculate_hash()
-        self._chain.append(genesis_block)
+        chain = [genesis_block]
         save_block_to_db(genesis_block)
+        return chain
 
     @property
-    def last_block(self):
+    def last_block(self) -> Block:
         return self._chain[0]
 
     @property
-    def n_blocks(self):
+    def n_blocks(self) -> int:
         return len(self._chain)
 
-    def get_chain(self):
+    def get_chain(self) -> List[Block]:
         return self._chain
 
-    def find_block_by_hash(self, block_hash):
-        # TODO: maybe if have a map (hash -> indexes) dont need to go through all the chain
-        for block in self._chain:
-            if block.hash == block_hash:
-                return block
-        return False
+    def find_block_by_hash(self, block_hash) -> Optional[Block]:
+        return block.find_by_hash(block_hash)
 
     def add_block(self, new_block: Block, proof: str):
         previous_hash = self.last_block.hash
@@ -72,39 +79,9 @@ class Blockchain:
         self._chain.append(new_block)
         save_block_to_db(new_block)
 
-    def mine(self):
-        if not self.new_data:
-            print('sem dados para adicionar ao bloco')
-            return False
-
-        last_block = self.last_block
-
-        new_indx = last_block.index + 1
-        new_block = Block(index=new_indx, data=self.new_data, prev_hash=last_block.hash)
-
-        proof = self.proof_of_work(new_block)
-
-        self.add_block(new_block, proof)
-        self.new_data = []
-        return new_block.index
-
-    def proof_of_work(self, block: Block):
-        block.nonce = 0
-        computed_hash = block.calculate_hash()
-        while not computed_hash.startswith('0' * self.calculate_difficulty()):
-            block.nonce += 1
-            computed_hash = block.calculate_hash()
-        return computed_hash
-
     def get_chain_data(self):
-        chain_data = []
-        for block in self._chain:
-            chain_data.append(block.__dict__)
-            # print(block.__dict__)
+        chain_data = [block.__dict__ for block in self._chain]
         return json.dumps({"length": len(chain_data), "chain": chain_data})
-
-    def set_data(self, data: str):
-        self.new_data = data
 
     def size_of_data(self):
         total_size = 0
@@ -113,5 +90,4 @@ class Blockchain:
         return total_size
 
     def calculate_difficulty(self):
-        # TODO: better way to calculate the difficulty
-        return ceil(len(self._chain) / 200)
+        return ceil(len(self._chain) / 10)
