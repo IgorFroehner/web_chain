@@ -30,6 +30,10 @@
                 <table class="table table-bordered table-dark">
                     <tbody>
                         <tr>
+                            <td>Block Index: </td>
+                            <td>{{ last_block.index }}</td>
+                        </tr>
+                        <tr>
                             <td>Version: </td>
                             <td>{{ last_block.version }}</td>
                         </tr>
@@ -82,7 +86,7 @@
         class Block {
             constructor(index, data, prev_hash) {
                 this.data = data
-                this.difficulty = 3
+                this.difficulty = -1
                 this.hash = ""
                 this.index = index
                 this.nonce = 1
@@ -92,11 +96,14 @@
             }
 
             async mine() {
+                this.difficulty = await fetchDifficulty()
+                {# TODO: create a best way to get the comparative_string #}
                 let comparative_string = ""
-                for (let i=0; i<this.difficulty; i++) comparative_string += '0';
+                for (let i=0; i<this.difficulty; i++) comparative_string += '0'
                 while (!(""+this.hash).startsWith(comparative_string)) {
                     this.nonce++
                     this.hash = await this.calculate_hash()
+                    console.log(this.hash)
                 }
             }
 
@@ -116,13 +123,19 @@
         }
 
         document.getElementById('bt-submit').addEventListener('click', async function(e) {
-            const b = new Block({{ last_block.index }} + 1, data.value, "{{ last_block.hash }}");
+            const b = await new Block({{ last_block.index }} + 1, data.value, "{{ last_block.hash }}");
             await b.mine();
-            post("/new_block", b).then(() => window.location.replace('/'))
+            post("/add_block", b).then(() => window.location.replace('/'))
         })
 
         window.post = async function (url, data_to_send) {
             await fetch(url, {method: 'POST', headers: {'Content-Type': 'application/json'},  body: JSON.stringify(data_to_send)})
+        }
+
+        async function fetchDifficulty() {
+            let res = await fetch('/difficulty')
+                .then(res => res.json())
+            return res['difficulty']
         }
 
     </script>

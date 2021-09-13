@@ -19,7 +19,7 @@
             <a class="navbar-brand" href="/">
                 <h1 class="h1 m-5">Web Chain</h1>
             </a>
-            <a href="/new_block"><button type="button" class="btn btn-success m-5">Add New Block</button></a>
+            <a href="/add_block"><button type="button" class="btn btn-success m-5">Add New Block</button></a>
         </div>
     </nav>
 
@@ -54,7 +54,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for block in blockchain.get_reversed_chain() %}
+                {% for block in blockchain.get_chain() %}
                     <tr>
                         <th scope="row">{{ block.index }}</th>
                         <td><a href="/block/{{ block.hash }}">{{ block.hash[:20] }}...</a></td>

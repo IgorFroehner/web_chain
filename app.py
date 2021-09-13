@@ -1,38 +1,49 @@
 from flask import Flask
 from flask import render_template, request, redirect
-from hashlib import sha256
+from flask_sqlalchemy import SQLAlchemy
+from decouple import config
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = config('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 from blockchain.blockchain import Blockchain
 from blockchain.block import Block
-
-app = Flask(__name__)
 
 bc = Blockchain()
 
 
 @app.route('/')
 def index():
+    # TODO: thing if it is correct
+    global bc
+    bc = bc.update()
     return render_template('index.html', blockchain=bc)
 
 
 @app.route('/block/<block_hash>')
 def block(block_hash: str):
-    blck = bc.find_block_by_hash(block_hash)
-    if not blck:
+    response_block = bc.find_block_by_hash(block_hash)
+    if not response_block:
         return redirect('/')
-    return render_template('block.html', block=blck)
+    return render_template('block.html', block=response_block)
 
 
-@app.route('/new_block', methods=['GET', 'POST'])
-def new_block():
+@app.route('/add_block', methods=['GET', 'POST'])
+def add_block():
     if request.method == 'POST':
         block_json = request.get_json()
         block_hash = block_json['hash']
-        # print(block_json)
-        # print(block_json['hash'])
-        block_test = Block(block_json=block_json)
+        new_block = Block(block_json=block_json)
 
-        bc.add_block(block_test, block_hash)
+        print(new_block.difficulty)
+        bc.add_block(new_block, block_hash)
 
         return redirect('/')
     return render_template('new_block.html', last_block=bc.last_block)
+
+
+@app.route('/difficulty')
+def difficulty():
+    return {'difficulty': bc.difficulty}
