@@ -6,6 +6,7 @@ from sqlalchemy import exc
 
 from blockchain.block import Block
 import blockchain.block as block
+from exceptions import BlockchainException
 
 
 def is_valid_proof(block: Block, block_hash: str) -> bool:
@@ -25,7 +26,6 @@ class Blockchain:
     def __init__(self):
         self._chain = self.init_chain()
         self.validate_chain()
-        self.difficulty = self.calculate_difficulty()
 
     def update(self):
         self._chain = get_chain_from_db()
@@ -70,14 +70,21 @@ class Blockchain:
         return block.find_by_hash(block_hash)
 
     def add_block(self, new_block: Block, proof: str):
+        self.validate_new_block(new_block, proof)
+        new_block.hash = proof
+        save_block_to_db(new_block)
+        self._chain = get_chain_from_db()
+
+    def validate_new_block(self, new_block: Block, proof: str):
         previous_hash = self.last_block.hash
         if previous_hash != new_block.prev_hash:
-            print('Wrong prev_hash')
+            raise BlockchainException(f'Invalid prev_hash to the new block to be added: Block {new_block.index}'
+                                      f' prev_hash should be {previous_hash} but was {new_block.prev_hash}')
+        if new_block.difficulty != self.calculate_difficulty():
+            raise BlockchainException(f'Wrong difficulty for the new block, it should be {self.calculate_difficulty()}')
         if not is_valid_proof(new_block, proof):
-            print('Invalid hash of this block')
-        new_block.hash = proof
-        self._chain.append(new_block)
-        save_block_to_db(new_block)
+            raise BlockchainException(f'Invalid proof of work in te new block to be added: Block {new_block.index}')
+
 
     def get_chain_data(self):
         chain_data = [block.__dict__ for block in self._chain]

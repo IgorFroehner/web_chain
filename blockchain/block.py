@@ -33,7 +33,6 @@ class Block(db.Model):
         block_dict.pop('hash', None)
         block_dict.pop('_sa_instance_state', None)
         block_string = json.dumps(block_dict, sort_keys=True, separators=(',', ':'), default=str)
-        print(block_string)
         return sha256(block_string.encode()).hexdigest()
 
     def hash_is_valid(self) -> bool:
