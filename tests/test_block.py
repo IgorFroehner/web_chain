@@ -2,14 +2,7 @@ import datetime
 from unittest import TestCase
 
 from blockchain import Block
-
-
-def mine(block: Block) -> Block:
-    block.hash = block.calculate_hash()
-    while not block.hash.startswith('0' * block.difficulty):
-        block.nonce += 1
-        block.hash = block.calculate_hash()
-    return block
+from blockchain.utils import mine
 
 
 def get_block_json():
