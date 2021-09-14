@@ -38,4 +38,4 @@ def add_block():
 def difficulty():
     from blockchain import Blockchain
     bc = Blockchain()
-    return {'difficulty': bc.difficulty}
+    return {'difficulty': bc.calculate_difficulty()}
