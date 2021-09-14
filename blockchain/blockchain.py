@@ -44,12 +44,12 @@ class Blockchain:
 
     def validate_chain(self) -> bool:
         for block in self._chain:
-            if not block.is_valid():
+            if not block.hash_is_valid():
                 return True
         return False
 
     def create_genesis_block(self) -> List[Block]:
-        genesis_block = Block(0, 'Grupo de brasileiros enviou bitcoin à Lua via rádio', "")
+        genesis_block = Block(index=0, data='Grupo de brasileiros enviou bitcoin à Lua via rádio', prev_hash="")
         genesis_block.hash = genesis_block.calculate_hash()
         chain = [genesis_block]
         save_block_to_db(genesis_block)

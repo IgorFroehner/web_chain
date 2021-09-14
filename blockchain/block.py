@@ -18,38 +18,37 @@ class Block(db.Model):
     difficulty = db.Column(db.Integer)
     data = db.Column(db.String)
 
-    def __init__(self, index=-1, data='', prev_hash='', difficulty=1, block_json: json = None):
-        # from constructor parameters
-        self.index = index
-        self.version = 1
-        self.prev_hash = prev_hash
-        self.hash = ''
-        self.time = datetime.utcnow().isoformat()
-        self.nonce = 1
-        self.data = data
-        self.difficulty = difficulty
-        if block_json is not None:
-            # from json
-            self.index = block_json['index']
-            self.version = block_json['version']
-            self.prev_hash = block_json['prev_hash']
-            self.hash = block_json['hash']
-            self.time = block_json['time']
-            self.nonce = block_json['nonce']
-            self.data = block_json['data']
-            self.difficulty = block_json['difficulty']
+    def __init__(self, **kwargs):
+        self.index = kwargs.get('index', -1)
+        self.version = kwargs.get('version', 1)
+        self.prev_hash = kwargs.get('prev_hash')
+        self.hash = kwargs.get('hash', '')
+        self.time = kwargs.get('time', datetime.utcnow().isoformat())
+        self.nonce = kwargs.get('nonce', 0)
+        self.data = kwargs.get('data')
+        self.difficulty = kwargs.get('difficulty', 1)
 
     def calculate_hash(self) -> str:
         block_dict = self.__dict__.copy()
         block_dict.pop('hash', None)
         block_dict.pop('_sa_instance_state', None)
         block_string = json.dumps(block_dict, sort_keys=True, separators=(',', ':'), default=str)
+        print(block_string)
         return sha256(block_string.encode()).hexdigest()
 
-    def is_valid(self) -> bool:
+    def hash_is_valid(self) -> bool:
         if self.index == 0:
             return True
         return (self.hash.startswith('0' * self.difficulty)) and self.hash == self.calculate_hash()
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.calculate_hash() == other.calculate_hash()
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 
 def save(block: Block):
