@@ -16,6 +16,12 @@ all you need to pay is the computation power of mining your block.
 3. Set the config env variable `SQLALCHEMY_DATABASE_URI`
 4. Run the app using command `flask run`
 
+### Run Tests
+
+```shell
+python3 -m unittest
+```
+
 ### Block Structure
 
 * **index**: The integer block index in the blockchain.
