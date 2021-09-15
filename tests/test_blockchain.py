@@ -29,13 +29,13 @@ class TestBlockchain(TestCase):
     def test_n_blocks(self):
         self.assertEqual(self.bc.n_blocks, 2)
 
-    def test_find_block_by_hash(self):
+    def test_should_find_block_by_hash(self):
         blockchain.block.find_by_hash = MagicMock(return_value=Block(hash='asdf'))
 
         block = self.bc.find_block_by_hash('asdf')
         self.assertEqual(block.hash, 'asdf')
 
-    def test_add_block(self):
+    def test_should_add_block(self):
         self.setUp()
         block = Block(index=3, prev_hash='2')
         block = mine(block)
