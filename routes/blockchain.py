@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect
 from flask import Blueprint
+from flask_login import login_required
 
 blue = Blueprint('blockchain', __name__, static_folder='static', template_folder='templates')
 
@@ -11,6 +12,7 @@ def index():
 
 
 @blue.route('/block/<block_hash>')
+@login_required
 def block(block_hash: str):
     from blockchain import Blockchain
     bc = Blockchain()
@@ -19,6 +21,7 @@ def block(block_hash: str):
 
 
 @blue.route('/add_block', methods=['GET', 'POST'])
+@login_required
 def add_block():
     from blockchain import Blockchain
     from blockchain import Block

@@ -1,15 +1,23 @@
 {% extends "base.html" %}
 {% block title %} Home | Web Chain {% endblock %}
 {% block body %}
-<body>
+    <body>
 
     <!-- As a link -->
     <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">
+        <div class="container-fluid row">
+            <a class="navbar-brand col-4" href="/">
                 <h1 class="h1 m-5">Web Chain</h1>
             </a>
-            <a href="/add_block"><button type="button" class="btn btn-success m-5">Add New Block</button></a>
+            {% if not current_user.is_authenticated %}
+                <a class="col text-end" href="/login">
+                    <button type="button" class="btn btn-success m-5">Login</button>
+                </a>
+            {% else %}
+                <h4 class="h4 col text-center">{{ current_user.user }}</h4>
+                <a class="col-2 btn btn-success me-3" href="/add_block">Add New Block</a>
+                <a class="btn col-2 btn-danger me-5" href="/logout">Logout</a>
+            {% endif %}
         </div>
     </nav>
 
@@ -17,7 +25,7 @@
 
         <div class="row">
             <div class="card text-white bg-dark mb-3 mt-5 col p-5 border-danger"
-                style="max-width: 50%; margin-right: 10%;">
+                 style="max-width: 50%; margin-right: 10%;">
                 <div class="card-body">
                     <h1 class="card-title" style="font-size: 80px">{{ blockchain.n_blocks }} Blocks</h1>
                     <p class="card-text">in the blockchain</p>
@@ -37,29 +45,29 @@
 
         <table class="table table-hover mt-5 mb-5 border-secondary">
             <thead>
-                <tr>
-                    <th scope="col">Index</th>
-                    <th scope="col">Block Hash</th>
-                    <th scope="col">Time (UTC)</th>
-                    <th scope="col">Block Data</th>
-                </tr>
+            <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Block Hash</th>
+                <th scope="col">Time (UTC)</th>
+                <th scope="col">Block Data</th>
+            </tr>
             </thead>
             <tbody>
-                {% for block in blockchain.get_chain() %}
-                    <tr>
-                        <th scope="row">{{ block.index }}</th>
-                        <td><a href="/block/{{ block.hash }}">{{ block.hash[:20] }}...</a></td>
-                        <td>{{ block.time }}</td>
-                        <td>{{ block.data }}</td>
-                    </tr>
-                {% endfor %}
+            {% for block in blockchain.get_chain() %}
+                <tr>
+                    <th scope="row">{{ block.index }}</th>
+                    <td><a href="/block/{{ block.hash }}">{{ block.hash[:20] }}...</a></td>
+                    <td>{{ block.time }}</td>
+                    <td>{{ block.data }}</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
 
     </div>
 
 
-</body>
+    </body>
 {% endblock %}
 
 </html>

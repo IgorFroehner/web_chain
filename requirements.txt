@@ -6,6 +6,7 @@ gunicorn==20.1.0
 itsdangerous==2.0.1
 Jinja2==3.0.1
 MarkupSafe==2.0.1
+passlib==1.7.4
 psycopg2-binary==2.8.6
 python-decouple==3.4
 SQLAlchemy==1.4.23
