@@ -2,72 +2,81 @@
 {% block head %}{% endblock %}
 {% block title %}Block | Web Chain{% endblock %}
 {% block body %}
-<body>
+    <body>
 
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Web Chain</a>
-    </div>
-</nav>
-
-<div class="container">
-    {% if block %}
-        <div class="card text-white bg-dark mb-5 mt-5 m p-5 border-success">
-            <div class="card-body">
-                <div class="container-fluid">
-                    <h1 class="card-title mb-4">Block
-                        <div class="badge bg-primary">{{ block.index }}</div>
-                    </h1>
-                </div>
-                <table class="table table-bordered table-dark">
-                    <tbody>
-                    <tr>
-                        <td>Version:</td>
-                        <td>{{ block.version }}</td>
-                    </tr>
-                    <tr>
-                        <td>Time (UTC):</td>
-                        <td>{{ block.time }}</td>
-                    </tr>
-                    <tr>
-                        <td>Difficulty:</td>
-                        <td>{{ block.difficulty }}</td>
-                    </tr>
-                    <tr>
-                        <td>Nonce:</td>
-                        <td>{{ block.nonce }}</td>
-                    </tr>
-                    <tr>
-                        {% if block.index != 0 %}
-                            <td>Previous Hash:</td>
-                            <td>
-                                <a href="/block/{{ block.prev_hash }}">
-                                    {{ block.prev_hash }}
-                                </a>
-                            </td>
-                        {% endif %}
-                    </tr>
-                    <tr>
-                        <td>Block Hash:</td>
-                        <td>{{ block.hash }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <h3 class="text-info text-center mb-4">Block Data: </h3>
-
-                <div class="form-group">
-                    <textarea class="form-control text-white bg-dark" disabled rows="20">{{ block.data }}</textarea>
-                </div>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Web Chain</a>
+            <div class="me-4">
+                {% if current_user.user %}
+                    {{ current_user.user }}
+                {% endif %}
             </div>
         </div>
-    {% else %}
-        <div class="alert alert-dismissible alert-danger">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            <strong>Bloco não encontrado!</strong> <a href="#" class="alert-link">Veja a lista dos blocos</a>.
-        </div>
-    {% endif %}
+    </nav>
 
-</div>
+    <div class="container">
+        {% if block %}
+            <div class="card text-white bg-dark mb-5 mt-5 m p-5 border-success">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <h1 class="card-title mb-4">Block
+                            <div class="badge bg-primary">{{ block.index }}</div>
+                        </h1>
+                    </div>
+                    <table class="table table-bordered table-dark">
+                        <tbody>
+                        <tr>
+                            <td>Version:</td>
+                            <td>{{ block.version }}</td>
+                        </tr>
+                        <tr>
+                            <td>Time (UTC):</td>
+                            <td>{{ block.time }}</td>
+                        </tr>
+                        <tr>
+                            <td>Difficulty:</td>
+                            <td>{{ block.difficulty }}</td>
+                        </tr>
+                        <tr>
+                            <td>User:</td>
+                            <td>{{ block.user }}</td>
+                        </tr>
+                        <tr>
+                            <td>Nonce:</td>
+                            <td>{{ block.nonce }}</td>
+                        </tr>
+                        <tr>
+                            {% if block.index != 0 %}
+                                <td>Previous Hash:</td>
+                                <td>
+                                    <a href="/block/{{ block.prev_hash }}">
+                                        {{ block.prev_hash }}
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Block Hash:</td>
+                            <td>{{ block.hash }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <h3 class="text-info text-center mb-4">Block Data: </h3>
 
-</body>
+                    <div class="form-group">
+                        <textarea class="form-control text-white bg-dark" disabled rows="20">{{ block.data }}</textarea>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <strong>Bloco não encontrado!</strong> <a href="#" class="alert-link">Veja a lista dos blocos</a>.
+            </div>
+        {% endif %}
+
+    </div>
+
+    </body>
 {% endblock %}
