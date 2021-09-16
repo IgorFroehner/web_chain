@@ -37,9 +37,9 @@ def login():
     if form.validate_on_submit():
         user = user_dao.find_by_user(form.user.data)
         if user is not None:
+            # sha256 is not the best encryption algorithm to passwords but this implementation was more simple.
             if user.password == sha256(form.password.data.encode('utf-8')).hexdigest():
                 login_user(user)
                 return redirect('/')
-        else:
-            return render_template('login.html', form=form)
+        return render_template('login.html', form=form, error="Incorrect user or password.")
     return render_template('login.html', form=form)

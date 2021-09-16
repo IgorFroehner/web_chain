@@ -3,24 +3,30 @@
 {% block head %}{% endblock %}
 {% block title %}Block | Web Chain{% endblock %}
 {% block body %}
-<body>
+    <body>
 
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Web Chain</a>
-    </div>
-</nav>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Web Chain</a>
+        </div>
+    </nav>
 
-<div class="container">
-    <div class="card text-white bg-dark mb-5 mt-5 m p-5 border-success">
+    <div class="container">
+        <div class="card text-white bg-dark mb-5 mt-5 m p-5 border-success">
             <div class="card-body">
+                {% if error %}
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        {{ error }}
+                    </div>
+                {% endif %}
                 <div class="container-fluid">
                     {{ form_macro(form) }}
                 </div>
             </div>
         </div>
     </div>
-</div>
+    </div>
 
-</body>
+    </body>
 {% endblock %}

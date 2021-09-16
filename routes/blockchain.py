@@ -12,7 +12,6 @@ def index():
 
 
 @blue.route('/block/<block_hash>')
-@login_required
 def block(block_hash: str):
     from blockchain import Blockchain
     bc = Blockchain()

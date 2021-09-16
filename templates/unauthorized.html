@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+{% extends "base.html" %}
+{% from "macros/form.html" import form_macro %}
+{% block head %}{% endblock %}
+{% block title %}Block | Web Chain{% endblock %}
+{% block body %}
 <body>
 
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Web Chain</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card text-white bg-dark mb-5 mt-5 m p-5 border-danger">
+            <h1 class="h1 card-header">Unauthorized</h1>
+            <div class="card-body">
+                <div class="container-fluid">
+                    Login is required to access this content.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
-</html>
+{% endblock %}
