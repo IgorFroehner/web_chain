@@ -13,7 +13,7 @@ all you need to pay is the computation power of mining your block.
 
 1. `pip3 install -r requirements.txt`
 2. Use `create.sql` to create the database
-3. Set the config env variable `SQLALCHEMY_DATABASE_URI`
+3. Set the config env variable `SQLALCHEMY_DATABASE_URI` and `SECRET_KEY`
 4. Run the app using command `flask run`
 
 ### Run Tests
