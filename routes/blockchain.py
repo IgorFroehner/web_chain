@@ -2,6 +2,9 @@ from flask import render_template, request, redirect
 from flask import Blueprint
 from flask_login import login_required
 
+from blockchain import Blockchain
+from blockchain import Block
+
 blue = Blueprint('blockchain', __name__, static_folder='static', template_folder='templates')
 
 
@@ -13,7 +16,6 @@ def index():
 
 @blue.route('/block/<block_hash>')
 def block(block_hash: str):
-    from blockchain import Blockchain
     bc = Blockchain()
     response_block = bc.find_block_by_hash(block_hash)
     return render_template('block.html', block=response_block)
@@ -22,8 +24,6 @@ def block(block_hash: str):
 @blue.route('/add_block', methods=['GET', 'POST'])
 @login_required
 def add_block():
-    from blockchain import Blockchain
-    from blockchain import Block
     bc = Blockchain()
     if request.method == 'POST':
         block_json = request.get_json()
@@ -38,6 +38,5 @@ def add_block():
 
 @blue.route('/difficulty')
 def difficulty():
-    from blockchain import Blockchain
     bc = Blockchain()
     return {'difficulty': bc.calculate_difficulty()}
