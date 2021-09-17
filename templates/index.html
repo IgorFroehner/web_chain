@@ -58,7 +58,7 @@
                     <th scope="row">{{ block.index }}</th>
                     <td><a href="/block/{{ block.hash }}">{{ block.hash[:20] }}...</a></td>
                     <td>{{ block.time }}</td>
-                    <td>{{ block.data }}</td>
+                    <td>{{ block.data[:50] + (block.data[50:] and '...') }}</td>
                 </tr>
             {% endfor %}
             </tbody>
